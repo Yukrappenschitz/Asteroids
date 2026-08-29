@@ -1,6 +1,7 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, LINE_WIDTH, PLAYER_RADIUS
 from logger import log_state
+from player import Player
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -16,10 +17,15 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # NEW CLOCK OBJECT from pygame (must be BEFORE GameLoop while loop)
-    Clock: Clock = pygame.time.Clock()
+    Clock = pygame.time.Clock()
 
 # DELTA TIME initialization (must be BEFORE GameLoop while loop)
     dt: float = 0.0
+
+    playerX = SCREEN_WIDTH / 2  
+    playerY = SCREEN_HEIGHT / 2
+
+    player = Player(playerX, playerY, PLAYER_RADIUS)
 
 #creating GAMELOOP
 
@@ -39,11 +45,26 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
+        
 
-
-        # can literally just pass the string "black" to the method    
+    # FILLING SCREEN black, can literally just pass the string "black" to the method    
         screen.fill("black")
 
+    # THINGS THAT NEED TO BE DRAWN BEFORE REFRESH
+
+        # DRAWING PLAYER
+            # For drawing player in center of screen
+        
+
+        
+
+        player.update(dt)
+        # PLAYER UPDATE CALL
+        
+        #PLAYER DRAW CALL
+        player.draw(screen)
+
+        #REFRESHING SCREEN (flipping screen)
         # method to refresh the screen. Be sure to call this last!
         pygame.display.flip()
 
