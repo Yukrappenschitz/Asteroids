@@ -22,6 +22,20 @@ def main():
 # DELTA TIME initialization (must be BEFORE GameLoop while loop)
     dt: float = 0.0
 
+
+# INITIALIZING GROUPS
+
+    updatable = pygame.sprite.Group() # will hold all the objects that can be updated
+    drawable = pygame.sprite.Group() # will hold all the objects that can be drawn
+
+    # ADDING CLASSES TO GROUPS:
+
+    Player.containers = (updatable, drawable) # Add the Player class to the updatable and drawable groups before the player object instance is created.
+
+# !!!! DO AFTER `GROUPS` INITIALIZATION
+
+# INITIALIZING PLAYER OBJECT (!!!! MUST BEFORE GAMELOOP OTHERWISE WILL SPAWN ALWAYS IN GIVEN COORDINATES and NOT UPDATE PROPERLY)
+    # For drawing player in center of screen
     playerX = SCREEN_WIDTH / 2  
     playerY = SCREEN_HEIGHT / 2
 
@@ -44,26 +58,29 @@ def main():
             """
             if event.type == pygame.QUIT:
                 return
-
         
-
     # FILLING SCREEN black, can literally just pass the string "black" to the method    
         screen.fill("black")
 
-    # THINGS THAT NEED TO BE DRAWN BEFORE REFRESH
+    # THINGS THAT NEED TO BE DRAWN/Updated BEFORE REFRESH
 
-        # DRAWING PLAYER
-            # For drawing player in center of screen
+        # GROUPS UPDATE CALL
+
+        updatable.update(dt)
+
+        # GROUPS DRAW CALL
+
+        for drawables in drawable:
+            drawables.draw(screen)
+
         
+        # PLAYER UPDATE CALL (switched over to GROUPS)
+        #player.update(dt)
+        
+        #PLAYER DRAW CALL (switched over to GROUPS)
+        #player.draw(screen)
 
         
-
-        player.update(dt)
-        # PLAYER UPDATE CALL
-        
-        #PLAYER DRAW CALL
-        player.draw(screen)
-
         #REFRESHING SCREEN (flipping screen)
         # method to refresh the screen. Be sure to call this last!
         pygame.display.flip()

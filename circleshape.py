@@ -2,7 +2,7 @@ import pygame
 
 
 # Base class for game objects
-class CircleShape(pygame.sprite.Sprite):
+class CircleShape(pygame.sprite.Sprite): #provided code
     containers: tuple[pygame.sprite.Group, ...]
 
     def __init__(self, x: float, y: float, radius: float) -> None:
