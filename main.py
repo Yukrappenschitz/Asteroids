@@ -1,6 +1,6 @@
 import sys
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, LINE_WIDTH, PLAYER_RADIUS
+from constants import * #SCREEN_WIDTH, SCREEN_HEIGHT, LINE_WIDTH, PLAYER_RADIUS
 from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
@@ -83,6 +83,10 @@ def main():
         # GROUPS UPDATE CALL
 
         updatable.update(dt)
+
+        # descreasing shoot timer by dt
+
+        player.shoot_cooldown -= dt
 
         # GROUPS DRAW CALL
 

@@ -1,6 +1,6 @@
 import pygame
 
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, SHOT_RADIUS
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, SHOT_RADIUS, PLAYER_SHOOT_COOLDOWN_SECONDS
 from circleshape import CircleShape
 from shot import Shot
 
@@ -12,6 +12,8 @@ class Player(CircleShape):
 
         self.rotation: int|float = 0
         # introducing new property `rotation` to probably determine direction/heading
+
+        self.shoot_cooldown = 0
 
         
         
@@ -71,7 +73,11 @@ class Player(CircleShape):
 
         if keys[pygame.K_SPACE]: # shoot bullet button
 
-            self.shoot()
+            if self.shoot_cooldown > 0:
+                pass
+            else:
+                self.shoot()
+                self.shoot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
 
 
     def shoot(self) -> None: # initializes a shot/bullet from player 
