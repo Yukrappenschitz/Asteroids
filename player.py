@@ -1,7 +1,8 @@
 import pygame
 
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, SHOT_RADIUS
 from circleshape import CircleShape
+from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x:float, y:float, radius: float):
@@ -10,7 +11,9 @@ class Player(CircleShape):
         #calling super to call the constructor of CircleShape with x,y as x,y and PLAYER_RADIUS as radius
 
         self.rotation: int|float = 0
-        # introducing new property `rotation` to probably determine direction/heading 
+        # introducing new property `rotation` to probably determine direction/heading
+
+        
         
             
     def triangle(self) -> list[pygame.Vector2]: #provided code
@@ -43,7 +46,7 @@ class Player(CircleShape):
 
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
-
+    #MOVEMENT keys
         if keys[pygame.K_a]: #turning left
 
             self.rotate(-dt)
@@ -64,6 +67,29 @@ class Player(CircleShape):
 
             self.move(-dt) # negate `dt`` for the S key, so the player moves backward.
 
+    #SHOOT
+
+        if keys[pygame.K_SPACE]: # shoot bullet button
+
+            self.shoot()
+
+
+    def shoot(self) -> None: # initializes a shot/bullet from player 
+
+        self.x = self.position[0] # needs to get update position cordinates [0] so needs to take from updating self.postion
+        self.y = self.position[1] # needs to get update position cordinates [1] so needs to take from updating self.postion
+
+        shot = Shot(self.x, self.y, SHOT_RADIUS) # need to spawn a new `Shot` at the player's current position
+
+        unit_vector = pygame.Vector2(0,1) # starting with a unit vector
+
+        rotated_vector = unit_vector.rotate(self.rotation) # rotating unit vector to align to player heading, and storing in a new vector
+
+        rotated_with_speed_vector = rotated_vector * PLAYER_SHOOT_SPEED #Scaling the properly headed vector (multiplied by PLAYER_SHOOT_SPEED) to make it move faster
+
+        shot.velocity += rotated_with_speed_vector # setting the shot.velocity attribute to the scaled and allgned vector
+
+
 
     def move(self,dt): # provided vector code
 
@@ -82,5 +108,7 @@ class Player(CircleShape):
         # Add the vector to the player's position to move them.
         
         self.position += rotated_with_speed_vector
+
+    
 
 

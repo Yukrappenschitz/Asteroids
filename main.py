@@ -5,6 +5,7 @@ from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -30,7 +31,9 @@ def main():
 
     updatable = pygame.sprite.Group() # will hold all the objects that can be updated
     drawable = pygame.sprite.Group() # will hold all the objects that can be drawn
-    asteroids = pygame.sprite.Group() 
+    asteroids = pygame.sprite.Group() # will hold asteroids
+
+    shots = pygame.sprite.Group() # will hold the shots/bullets
 
     # ADDING CLASSES TO GROUPS:
 
@@ -39,8 +42,9 @@ def main():
 
     AsteroidField.containers = (updatable) # the AsteroidField class and set its static containers field to only the updatable group (it's not drawable, and it's not an asteroid itself)
 
+    Shot.containers = (shots,updatable,drawable) # the Shot class needs to be in its own shot group BUT also in updatable, drawable
 
-# !!!! DO AFTER `GROUPS` INITIALIZATION
+# !!!! NEEDS TO BE INITIALIZED AFTER `GROUPS` and `CONTAINERS` INITIALIZATION
 
 # INITIALIZING ASTEROID FIELD OBJECT
 
@@ -86,16 +90,17 @@ def main():
             drawables.draw(screen)
 
         
-        # PLAYER UPDATE CALL (switched over to GROUPS)
-        #player.update(dt)
+                # PLAYER UPDATE CALL (switched over to GROUPS)
+                #player.update(dt)
         
-        #PLAYER DRAW CALL (switched over to GROUPS)
-        #player.draw(screen)
+                #PLAYER DRAW CALL (switched over to GROUPS)
+                #player.draw(screen)
 
-        # !!! CHECKING FOR COLLISON
-        for asteroid in asteroids:
-            
-            if player.collides_with(asteroid):
+        # !!! CHECKING FOR COLLISON (!!! MUST BE AFTER THE "UPDATED" FRAME to properly check collision BUT before next refresh)
+
+        for asteroid in asteroids: # iterate over all the objects in your asteroids group
+
+            if player.collides_with(asteroid): # Checking if any of them collide with the player
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
