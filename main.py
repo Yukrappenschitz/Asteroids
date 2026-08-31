@@ -1,7 +1,10 @@
+import sys
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, LINE_WIDTH, PLAYER_RADIUS
-from logger import log_state
+from logger import log_state, log_event
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -27,12 +30,21 @@ def main():
 
     updatable = pygame.sprite.Group() # will hold all the objects that can be updated
     drawable = pygame.sprite.Group() # will hold all the objects that can be drawn
+    asteroids = pygame.sprite.Group() 
 
     # ADDING CLASSES TO GROUPS:
 
     Player.containers = (updatable, drawable) # Add the Player class to the updatable and drawable groups before the player object instance is created.
+    Asteroid.containers = (asteroids, updatable, drawable) # Asteroid needs to be in updatable and drawable
+
+    AsteroidField.containers = (updatable) # the AsteroidField class and set its static containers field to only the updatable group (it's not drawable, and it's not an asteroid itself)
+
 
 # !!!! DO AFTER `GROUPS` INITIALIZATION
+
+# INITIALIZING ASTEROID FIELD OBJECT
+
+    asteroidfield = AsteroidField()
 
 # INITIALIZING PLAYER OBJECT (!!!! MUST BEFORE GAMELOOP OTHERWISE WILL SPAWN ALWAYS IN GIVEN COORDINATES and NOT UPDATE PROPERLY)
     # For drawing player in center of screen
@@ -80,6 +92,15 @@ def main():
         #PLAYER DRAW CALL (switched over to GROUPS)
         #player.draw(screen)
 
+        # !!! CHECKING FOR COLLISON
+        for asteroid in asteroids:
+            
+            if player.collides_with(asteroid):
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
+            else: 
+                pass
         
         #REFRESHING SCREEN (flipping screen)
         # method to refresh the screen. Be sure to call this last!

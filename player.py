@@ -34,7 +34,7 @@ class Player(CircleShape):
     # drawing player polygon call
         pygame.draw.polygon(screen, "white", self.triangle(),LINE_WIDTH)
 
-        return super().draw(screen)
+        #return super().draw(screen)
 
     def rotate(self,dt):
 
@@ -56,11 +56,11 @@ class Player(CircleShape):
 
             # To go right when `d` keypress is pressed, you'll need to use dt
         
-        if keys[pygame.K_w]: # forward
+        if keys[pygame.K_w]: # forward/up
 
             self.move(dt)
 
-        if keys[pygame.K_s]: # backwards
+        if keys[pygame.K_s]: # backwards/down
 
             self.move(-dt) # negate `dt`` for the S key, so the player moves backward.
 
@@ -83,4 +83,4 @@ class Player(CircleShape):
         
         self.position += rotated_with_speed_vector
 
-   
+
