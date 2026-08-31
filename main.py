@@ -102,15 +102,30 @@ def main():
 
         # !!! CHECKING FOR COLLISON (!!! MUST BE AFTER THE "UPDATED" FRAME to properly check collision BUT before next refresh)
 
-        for asteroid in asteroids: # iterate over all the objects in your asteroids group
+        for asteroid in asteroids: # iterate over all the objects in your asteroids group to check collision with player
 
             if player.collides_with(asteroid): # Checking if any of them collide with the player
-                log_event("player_hit")
+                log_event("player_hit") # log event
                 print("Game over!")
-                sys.exit()
+                sys.exit() # exiting game since game over
             else: 
                 pass
-        
+
+        for asteroid in asteroids: # iterate over all the objects in your asteroids group to check collision with shots
+
+            for shot in shots: # iterate over all the objects in the shots to check every shot and if they collide with an asteroid
+
+                if asteroid.collides_with(shot): # checking collision with shot and asteroid
+                    log_event("asteroid_shot") # log event
+
+                    asteroid.kill() # calling built in pygame .kill() method on asteroid
+                    shot.kill() # calling built in pygame .kill() method on shot
+
+                    #The kill() method is a built-in feature of Pygame sprites. It removes the "killed" object from all its groups so that the engine stops updating and drawing it.
+                
+                else:
+                    pass
+                 
         #REFRESHING SCREEN (flipping screen)
         # method to refresh the screen. Be sure to call this last!
         pygame.display.flip()
@@ -121,7 +136,7 @@ def main():
         """
         dt = Clock.tick(60) / 1000
 
-        
+       
 
 
 
