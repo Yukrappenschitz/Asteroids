@@ -141,7 +141,7 @@ def main():
         """
         dt = Clock.tick(60) / 1000
 
-#push example
+
 
 if __name__ == "__main__":
     main()
